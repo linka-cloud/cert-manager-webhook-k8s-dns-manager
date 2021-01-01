@@ -1,4 +1,4 @@
-IMAGE_NAME := "webhook"
+IMAGE_NAME := "registry.gitlab.com/linka-cloud/k8s/cert-manager-webhook-k8s-dns"
 IMAGE_TAG := "latest"
 
 OUT := $(shell pwd)/_out
@@ -23,10 +23,15 @@ verify:
 build:
 	docker build -t "$(IMAGE_NAME):$(IMAGE_TAG)" .
 
+push:
+	docker push $(IMAGE_NAME):$(IMAGE_TAG)
+
+docker: build push
+
 .PHONY: rendered-manifest.yaml
 rendered-manifest.yaml:
 	helm template \
-	    --name k8s-dns-webhook \
+	    cert-manager-webhook-k8s-dns \
         --set image.repository=$(IMAGE_NAME) \
         --set image.tag=$(IMAGE_TAG) \
-        deploy/k8s-dns-webhook > "$(OUT)/rendered-manifest.yaml"
+        deploy/cert-manager-webhook-k8s-dns > "$(OUT)/rendered-manifest.yaml"

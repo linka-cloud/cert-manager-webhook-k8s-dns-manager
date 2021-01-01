@@ -1,0 +1,6 @@
+.idea
+_out
+deploy
+scripts
+testdata
+main_test.go

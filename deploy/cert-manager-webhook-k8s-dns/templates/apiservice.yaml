@@ -1,0 +1,19 @@
+apiVersion: apiregistration.k8s.io/v1beta1
+kind: APIService
+metadata:
+  name: v1alpha1.{{ .Values.groupName }}
+  labels:
+    app: {{ include "cert-manager-webhook-k8s-dns.name" . }}
+    chart: {{ include "cert-manager-webhook-k8s-dns.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    cert-manager.io/inject-ca-from: "{{ .Release.Namespace }}/{{ include "cert-manager-webhook-k8s-dns.servingCertificate" . }}"
+spec:
+  group: {{ .Values.groupName }}
+  groupPriorityMinimum: 1000
+  versionPriority: 15
+  service:
+    name: {{ include "cert-manager-webhook-k8s-dns.fullname" . }}
+    namespace: {{ .Release.Namespace }}
+  version: v1alpha1

@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "k8s-dns-webhook.name" -}}
+{{- define "cert-manager-webhook-k8s-dns.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "k8s-dns-webhook.fullname" -}}
+{{- define "cert-manager-webhook-k8s-dns.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,22 +27,22 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "k8s-dns-webhook.chart" -}}
+{{- define "cert-manager-webhook-k8s-dns.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "k8s-dns-webhook.selfSignedIssuer" -}}
-{{ printf "%s-selfsign" (include "k8s-dns-webhook.fullname" .) }}
+{{- define "cert-manager-webhook-k8s-dns.selfSignedIssuer" -}}
+{{ printf "%s-selfsign" (include "cert-manager-webhook-k8s-dns.fullname" .) }}
 {{- end -}}
 
-{{- define "k8s-dns-webhook.rootCAIssuer" -}}
-{{ printf "%s-ca" (include "k8s-dns-webhook.fullname" .) }}
+{{- define "cert-manager-webhook-k8s-dns.rootCAIssuer" -}}
+{{ printf "%s-ca" (include "cert-manager-webhook-k8s-dns.fullname" .) }}
 {{- end -}}
 
-{{- define "k8s-dns-webhook.rootCACertificate" -}}
-{{ printf "%s-ca" (include "k8s-dns-webhook.fullname" .) }}
+{{- define "cert-manager-webhook-k8s-dns.rootCACertificate" -}}
+{{ printf "%s-ca" (include "cert-manager-webhook-k8s-dns.fullname" .) }}
 {{- end -}}
 
-{{- define "k8s-dns-webhook.servingCertificate" -}}
-{{ printf "%s-webhook-tls" (include "k8s-dns-webhook.fullname" .) }}
+{{- define "cert-manager-webhook-k8s-dns.servingCertificate" -}}
+{{ printf "%s-webhook-tls" (include "cert-manager-webhook-k8s-dns.fullname" .) }}
 {{- end -}}
