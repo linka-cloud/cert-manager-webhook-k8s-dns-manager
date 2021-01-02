@@ -1,4 +1,4 @@
-# [k8s-dns](gitlab.com/linka-cloud/k8s/dns) Webhook for Cert Manager
+# [k8s-dns](https://gitlab.com/linka-cloud/k8s/dns) Webhook for Cert Manager
 
 ## Prerequisites
 
