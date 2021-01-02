@@ -13,7 +13,6 @@ import (
 	"github.com/jetstack/cert-manager/pkg/acme/webhook/apis/acme/v1alpha1"
 	"github.com/jetstack/cert-manager/pkg/acme/webhook/cmd"
 	"github.com/sirupsen/logrus"
-	extapi "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
@@ -95,12 +94,12 @@ func (c *k8sDNSProviderSolver) Name() string {
 // cert-manager itself will later perform a self check to ensure that the
 // solver has correctly configured the DNS provider.
 func (c *k8sDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
-	cfg, err := loadConfig(ch.Config)
+	cfg, err := loadConfig(ch)
 	if err != nil {
 		return err
 	}
 	c.log.Info("decoded configuration", "config", cfg)
-	c.log.Info("create TXT record", "name", ch.ResolvedFQDN, "target", ch.Key)
+	c.log.Info("create TXT record", "id", ch.UID, "name", ch.ResolvedFQDN, "target", ch.Key)
 
 	a := map[string]string {
 		AnnotationKey: ch.ResolvedFQDN,
@@ -118,7 +117,7 @@ func (c *k8sDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 		Spec:       dnsv1alpha1.DNSRecordSpec{
 			TXT: &dnsv1alpha1.TXTRecord{
 				Name:    ch.ResolvedFQDN,
-				Ttl:     10,
+				Ttl:     30,
 				Targets: []string{ch.Key},
 			},
 		},
@@ -143,12 +142,12 @@ func (c *k8sDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 // This is in order to facilitate multiple DNS validations for the same domain
 // concurrently.
 func (c *k8sDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
-	cfg, err := loadConfig(ch.Config)
+	cfg, err := loadConfig(ch)
 	if err != nil {
 		return err
 	}
 	c.log.Info("decoded configuration", "config", cfg)
-	c.log.Info("cleaning TXT record", "name", ch.ResolvedFQDN, "target", ch.Key)
+	c.log.Info("cleaning TXT record", "id", ch.UID, "name", ch.ResolvedFQDN, "target", ch.Key)
 	a := map[string]string {
 		AnnotationKey: ch.ResolvedFQDN,
 	}
@@ -165,7 +164,7 @@ func (c *k8sDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 		Spec:       dnsv1alpha1.DNSRecordSpec{
 			TXT: &dnsv1alpha1.TXTRecord{
 				Name:    ch.ResolvedFQDN,
-				Ttl:     10,
+				Ttl:     30,
 				Targets: []string{ch.Key},
 			},
 		},
@@ -197,19 +196,19 @@ func (c *k8sDNSProviderSolver) Initialize(kubeClientConfig *rest.Config, stopCh 
 
 // loadConfig is a small helper function that decodes JSON configuration into
 // the typed config struct.
-func loadConfig(cfgJSON *extapi.JSON) (k8sDNSProviderConfig, error) {
+func loadConfig(ch *v1alpha1.ChallengeRequest) (k8sDNSProviderConfig, error) {
 	cfg := k8sDNSProviderConfig{
-		Namespace: "cert-manager",
+		Namespace: ch.ResourceNamespace,
 	}
 	// handle the 'base case' where no configuration has been provided
-	if cfgJSON == nil {
+	if ch.Config == nil {
 		return cfg, nil
 	}
-	if err := json.Unmarshal(cfgJSON.Raw, &cfg); err != nil {
+	if err := json.Unmarshal(ch.Config.Raw, &cfg); err != nil {
 		return cfg, fmt.Errorf("error decoding solver config: %v", err)
 	}
 	if cfg.Namespace == "" {
-		cfg.Namespace = "cert-manager"
+		cfg.Namespace = ch.ResourceNamespace
 	}
 	return cfg, nil
 }
