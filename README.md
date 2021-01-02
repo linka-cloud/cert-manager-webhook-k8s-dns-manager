@@ -5,7 +5,7 @@
 * [cert-manager](https://github.com/jetstack/cert-manager) version 0.11.0 or higher (*tested with 0.12.0*):
     - [Installing on Kubernetes](https://cert-manager.io/docs/installation/kubernetes/#installing-with-helm)
     
-* [k8s-dns](gitlab.com/linka-cloud/k8s/dns) installed and configured
+* [k8s-dns](https://gitlab.com/linka-cloud/k8s/dns) installed and configured
 
 ## Installation
 1. Clone this repository:
