@@ -1,16 +1,16 @@
-# [k8s-dns-manager](https://gitlab.com/linka-cloud/k8s/dns) Webhook for Cert Manager
+# [k8s-dns-manager](https://github.com/linka-cloud/k8s-dns-manager) Webhook for Cert Manager
 
 ## Prerequisites
 
 * [cert-manager](https://github.com/jetstack/cert-manager) version 0.11.0 or higher (*tested with 0.12.0*):
     - [Installing on Kubernetes](https://cert-manager.io/docs/installation/kubernetes/#installing-with-helm)
     
-* [k8s-dns-manager](https://gitlab.com/linka-cloud/k8s/dns) installed and configured
+* [k8s-dns-manager](https://github.com/linka-cloud/k8s-dns-manager) installed and configured
 
 ## Installation
 1. Clone this repository:
    ```bash
-   $ git clone https://gitlab.com/linka-cloud/k8s/cert-manager-webhook-k8s-dns-manager.git && \
+   $ git clone https://github.com/linka-cloud/cert-manager-webhook-k8s-dns-manager.git && \
         cd cert-manager-webhook-k8s-dns-manager
    ```
 2. Run:
