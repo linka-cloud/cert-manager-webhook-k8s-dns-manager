@@ -31,6 +31,6 @@ echo "downloading binaries"
 curl -sL "$archive_url" -o "$archive_file"
 tar -zxf "$archive_file" -C "$output_dir/"
 
-curl -sLo ./kind "https://kind.sigs.k8s.io/dl/v0.9.0/kind-${os}-amd64"
+curl -sLo ./kind "https://kind.sigs.k8s.io/dl/v0.19.0/kind-${os}-amd64"
 chmod +x ./kind
 mv ./kind "$bin_dir"

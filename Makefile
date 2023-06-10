@@ -15,9 +15,12 @@ verify:
 	@./scripts/fetch-test-binaries.sh
 	$(KIND) get clusters | grep $(KIND_NAME) || $(KIND) create cluster --config=testdata/k8s-dns/kind.yaml --name $(KIND_NAME)
 	$(KIND) export kubeconfig --name $(KIND_NAME)
-	$(KUBECTL) apply -f $(TEST_DATA)/dns.linka.cloud_dnsrecord.yaml
+	$(KUBECTL) apply -f $(TEST_DATA)/dns.linka.cloud_dnsrecords.yaml
 	$(KUBECTL) apply -f $(TEST_DATA)/k8s-dns.yml --wait
-	@TEST_ZONE_NAME=example.com. go test -v .
+	@TEST_ZONE_NAME=example.com. go test -v -count=1 .
+	$(KIND) delete cluster --name $(KIND_NAME)
+
+clean:
 	$(KIND) delete cluster --name $(KIND_NAME)
 
 build:
@@ -25,6 +28,7 @@ build:
 
 push:
 	docker push $(IMAGE_NAME):$(IMAGE_TAG)
+
 
 docker: build push
 

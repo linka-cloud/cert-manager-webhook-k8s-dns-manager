@@ -101,20 +101,20 @@ func (c *k8sDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 	c.log.Info("decoded configuration", "config", cfg)
 	c.log.Info("create TXT record", "id", ch.UID, "name", ch.ResolvedFQDN, "target", ch.Key)
 
-	a := map[string]string {
+	a := map[string]string{
 		AnnotationKey: ch.ResolvedFQDN,
 	}
 	r := dnsv1alpha1.DNSRecord{
-		TypeMeta:   v1.TypeMeta{
+		TypeMeta: v1.TypeMeta{
 			APIVersion: dnsv1alpha1.GroupVersion.String(),
-			Kind: "DNSRecord",
+			Kind:       "DNSRecord",
 		},
 		ObjectMeta: v1.ObjectMeta{
-			Name: recordName(ch),
-			Namespace: cfg.Namespace,
+			Name:        recordName(ch),
+			Namespace:   cfg.Namespace,
 			Annotations: a,
 		},
-		Spec:       dnsv1alpha1.DNSRecordSpec{
+		Spec: dnsv1alpha1.DNSRecordSpec{
 			TXT: &dnsv1alpha1.TXTRecord{
 				Name:    ch.ResolvedFQDN,
 				Ttl:     30,
@@ -129,7 +129,7 @@ func (c *k8sDNSProviderSolver) Present(ch *v1alpha1.ChallengeRequest) error {
 	// We cannot use controller-runtime client as this would introduce dependency issues
 	return c.client.RESTClient().
 		Post().
-		AbsPath("apis", dnsv1alpha1.GroupVersion.Group, dnsv1alpha1.GroupVersion.Version, "namespaces", r.Namespace, "dnsrecord").
+		AbsPath("apis", dnsv1alpha1.GroupVersion.Group, dnsv1alpha1.GroupVersion.Version, "namespaces", r.Namespace, "dnsrecords").
 		Body(b).
 		Do().
 		Error()
@@ -148,20 +148,20 @@ func (c *k8sDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	}
 	c.log.Info("decoded configuration", "config", cfg)
 	c.log.Info("cleaning TXT record", "id", ch.UID, "name", ch.ResolvedFQDN, "target", ch.Key)
-	a := map[string]string {
+	a := map[string]string{
 		AnnotationKey: ch.ResolvedFQDN,
 	}
 	r := dnsv1alpha1.DNSRecord{
-		TypeMeta:   v1.TypeMeta{
+		TypeMeta: v1.TypeMeta{
 			APIVersion: dnsv1alpha1.GroupVersion.String(),
-			Kind: "DNSRecord",
+			Kind:       "DNSRecord",
 		},
 		ObjectMeta: v1.ObjectMeta{
-			Name: recordName(ch),
-			Namespace: cfg.Namespace,
+			Name:        recordName(ch),
+			Namespace:   cfg.Namespace,
 			Annotations: a,
 		},
-		Spec:       dnsv1alpha1.DNSRecordSpec{
+		Spec: dnsv1alpha1.DNSRecordSpec{
 			TXT: &dnsv1alpha1.TXTRecord{
 				Name:    ch.ResolvedFQDN,
 				Ttl:     30,
@@ -171,7 +171,7 @@ func (c *k8sDNSProviderSolver) CleanUp(ch *v1alpha1.ChallengeRequest) error {
 	}
 	return c.client.RESTClient().
 		Delete().
-		AbsPath("apis", dnsv1alpha1.GroupVersion.Group, dnsv1alpha1.GroupVersion.Version, "namespaces", r.Namespace, "dnsrecord", r.Name).
+		AbsPath("apis", dnsv1alpha1.GroupVersion.Group, dnsv1alpha1.GroupVersion.Version, "namespaces", r.Namespace, "dnsrecords", r.Name).
 		Do().
 		Error()
 }
