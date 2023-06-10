@@ -12,9 +12,10 @@ RUN go mod download
 
 FROM build_deps AS build
 
-COPY . .
+COPY pkg pkg
+COPY main.go main.go
 
-RUN CGO_ENABLED=0 go build -o webhook -ldflags '-w -extldflags "-static"' .
+RUN CGO_ENABLED=0 go build -o webhook -ldflags="-s -w" .
 
 FROM alpine:3.9
 

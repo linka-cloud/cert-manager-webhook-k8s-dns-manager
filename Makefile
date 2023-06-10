@@ -1,4 +1,4 @@
-IMAGE_NAME := "registry.gitlab.com/linka-cloud/k8s/cert-manager-webhook-k8s-dns"
+IMAGE_NAME := "linkacloud/cert-manager-webhook-k8s-dns"
 IMAGE_TAG := "latest"
 
 OUT := $(shell pwd)/_out
@@ -39,3 +39,4 @@ rendered-manifest.yaml:
         --set image.repository=$(IMAGE_NAME) \
         --set image.tag=$(IMAGE_TAG) \
         deploy/cert-manager-webhook-k8s-dns > "$(OUT)/rendered-manifest.yaml"
+	cp $(OUT)/rendered-manifest.yaml deploy/manifests.yaml

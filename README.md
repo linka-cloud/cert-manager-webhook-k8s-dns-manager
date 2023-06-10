@@ -8,6 +8,9 @@
 * [k8s-dns-manager](https://github.com/linka-cloud/k8s-dns-manager) installed and configured
 
 ## Installation
+
+### Using Helm
+
 1. Clone this repository:
    ```bash
    $ git clone https://github.com/linka-cloud/cert-manager-webhook-k8s-dns-manager.git && \
@@ -17,6 +20,12 @@
     ```bash
     $ helm install cert-manager-webhook-k8s-dns ./deploy/cert-manager-webhook-k8s-dns
     ```
+
+### Using kubectl
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/linka-cloud/cert-manager-webhook-k8s-dns-manager/main/deploy/manifests.yaml
+```
 
 ## How to use it
 

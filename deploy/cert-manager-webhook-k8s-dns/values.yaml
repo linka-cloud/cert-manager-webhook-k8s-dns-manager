@@ -13,7 +13,7 @@ certManager:
   serviceAccountName: cert-manager
 
 image:
-  repository: registry.gitlab.com/linka-cloud/k8s/cert-manager-webhook-k8s-dns
+  repository: linkacloud/cert-manager-webhook-k8s-dns
   # tag: latest
   pullPolicy: IfNotPresent
   tag: latest
