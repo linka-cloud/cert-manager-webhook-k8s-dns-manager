@@ -103,7 +103,7 @@ rules:
 - apiGroups:
   - dns.linka.cloud
   resources:
-  - dnsrecord
+  - dnsrecords
   verbs:
   - create
   - delete
